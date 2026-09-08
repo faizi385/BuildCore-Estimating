@@ -1,4 +1,4 @@
-PS ESTIMATING STATIC WEBSITE
+BuildCore ESTIMATING STATIC WEBSITE
 =============================
 
 Included:
