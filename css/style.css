@@ -55,7 +55,13 @@ a {
   text-decoration: none;
 }
 .brand-logo {
-  height: 120px;
+  height: 170px;
+  width: auto;
+  display: block;
+}
+.footer-logo {
+    margin-left: -55px;
+  height: 160px;
   width: auto;
   display: block;
 }
@@ -817,7 +823,6 @@ a {
   font-size: 9px;
   color: #b9c8d9;
   max-width: 250px;
-  margin-top: 15px;
 }
 .footer h4 {
   font-size: 20px;
@@ -1322,6 +1327,78 @@ a {
   display: block;
   width: 100%;
   height: 450px;
+}
+.popup-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.popup-content {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.popup-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.popup-close:hover {
+  color: #333;
+}
+.popup-icon {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.popup-content h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #12544F;
+  margin: 0 0 10px;
+}
+.popup-content p {
+  font-size: 15px;
+  color: #5a6b7d;
+  line-height: 1.5;
+  margin: 0;
 }
 @media (max-width: 700px) {
   .page-hero h1 {

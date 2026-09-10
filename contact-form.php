@@ -2,6 +2,8 @@
 // Contact Form Handler for BuildCore Estimating
 // Configure this file for your cPanel hosting
 
+header('Content-Type: application/json');
+
 // Email configuration
 $to_email = "info@buildcoreestimating.com";
 $from_email = "noreply@buildcoreestimating.com"; // Use your domain email
@@ -18,15 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Validate required fields
     if (empty($name) || empty($email) || empty($message)) {
-        http_response_code(400);
-        echo "Please fill in all required fields.";
+        echo json_encode(['success' => false, 'message' => 'Please fill in all required fields.']);
         exit;
     }
     
     // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        http_response_code(400);
-        echo "Please provide a valid email address.";
+        echo json_encode(['success' => false, 'message' => 'Please provide a valid email address.']);
         exit;
     }
     
@@ -55,16 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Send email
     if (mail($to_email, $subject, $email_content, $headers)) {
-        // Success - redirect back to contact page with success message
-        echo "<script>alert('Thank you! Your message has been sent successfully.'); window.location.href='contact.html';</script>";
+        echo json_encode(['success' => true, 'message' => 'Thank you! Your message has been sent successfully.']);
     } else {
-        // Error
-        http_response_code(500);
-        echo "There was a problem sending your message. Please try again or contact us directly at info@buildcoreestimating.com";
+        echo json_encode(['success' => false, 'message' => 'There was a problem sending your message. Please try again or contact us directly at info@buildcoreestimating.com']);
     }
 } else {
     // Not a POST request
-    http_response_code(403);
-    echo "There was a problem with your submission. Please try again.";
+    echo json_encode(['success' => false, 'message' => 'There was a problem with your submission. Please try again.']);
 }
 ?>

@@ -23,7 +23,7 @@
   <header class="header" id="header">
     <div class="container nav-wrap">
       <a class="brand" href="index.html" aria-label="Pacific Sunshine home">
-        <img src="assets/logo.png" alt="BuildCore Estimating Logo" class="brand-logo">
+     <img src="assets/logoo.png" alt="BuildCore Estimating Logo" class="brand-logo">
       </a>
 
       <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
@@ -131,7 +131,15 @@ United States</span>
         </div>
         <div class="container">
           <div class="map-full-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3531.123456789!2d-82.6789!3d27.7678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88c2e4e4e4e4e4e4%3A0x4e4e4e4e4e4e4e4e!2s7901%204th%20St%2C%20St.%20Petersburg%2C%20FL%2033702!5e0!3m2!1sen!2sus!4v1234567890" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          <iframe
+    src="https://www.google.com/maps?q=Gigi+Greiss,+815+Volker+St+Apt+27,+Fairfax,+MO+64446,+United+States&output=embed"
+    width="100%"
+    height="400"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+</iframe>
           </div>
         </div>
       </section>
@@ -140,7 +148,7 @@ United States</span>
     <div class="container footer-grid">
       <div>
         <a class="" href="index.html">
-            <img src="assets/footer.png" alt="BuildCore Estimating Logo" class="brand-logo">
+        <img src="assets/footer2.png" alt="BuildCore Estimating Logo" class="footer-logo">
         </a>
         <p>We provide accurate construction estimating and material takeoff services to help contractors win more bids and grow their business.</p>
         <div class="socials"><a href="#">in</a><a href="#">f</a><a href="#">◎</a></div>
@@ -155,5 +163,86 @@ United States</p></div>
     <div class="container footer-bottom"><span>© 2026 BuildCore Estimating. All rights reserved.</span><span><a href="#">Privacy Policy</a> · <a href="#">Terms & Conditions</a></span></div>
   </footer>
     <script src="js/script.js"></script>
+    
+    <!-- Popup Modal -->
+    <div id="popupModal" class="popup-modal">
+      <div class="popup-content">
+        <span class="popup-close" onclick="closePopup()">&times;</span>
+        <div class="popup-icon" id="popupIcon">✓</div>
+        <h3 id="popupTitle">Message Sent!</h3>
+        <p id="popupMessage">Thank you! Your message has been sent successfully.</p>
+      </div>
+    </div>
+
+    <script>
+      // Contact Form AJAX Submission
+      document.getElementById('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const form = this;
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        
+        // Disable button and show loading
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        
+        fetch('contact-form.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showPopup('success', data.message);
+            form.reset();
+          } else {
+            showPopup('error', data.message);
+          }
+        })
+        .catch(error => {
+          showPopup('error', 'There was a problem sending your message. Please try again.');
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        });
+      });
+
+      // Show Popup
+      function showPopup(type, message) {
+        const modal = document.getElementById('popupModal');
+        const icon = document.getElementById('popupIcon');
+        const title = document.getElementById('popupTitle');
+        const msg = document.getElementById('popupMessage');
+        
+        if (type === 'success') {
+          icon.textContent = '✓';
+          icon.style.color = '#12544F';
+          title.textContent = 'Message Sent!';
+        } else {
+          icon.textContent = '✕';
+          icon.style.color = '#dc2626';
+          title.textContent = 'Error';
+        }
+        
+        msg.textContent = message;
+        modal.style.display = 'flex';
+      }
+
+      // Close Popup
+      function closePopup() {
+        document.getElementById('popupModal').style.display = 'none';
+      }
+
+      // Close popup when clicking outside
+      window.onclick = function(event) {
+        const modal = document.getElementById('popupModal');
+        if (event.target === modal) {
+          closePopup();
+        }
+      }
+    </script>
   </body>
 </html>
