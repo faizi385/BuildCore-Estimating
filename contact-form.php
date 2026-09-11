@@ -5,69 +5,122 @@ use PHPMailer\PHPMailer\Exception;
 
 header('Content-Type: application/json');
 
-// PHPMailer
-require __DIR__ . '/vendor/autoload.php';
+// ========================================
+// PHPMailer - Manual Installation
+// ========================================
 
-// Email settings
-$to_email = 'info@buildcoreestimating.com';
+require __DIR__ . '/PHPMailer/src/Exception.php';
+require __DIR__ . '/PHPMailer/src/PHPMailer.php';
+require __DIR__ . '/PHPMailer/src/SMTP.php';
+
+
+// ========================================
+// Email Settings
+// ========================================
+
+$to_email   = 'info@buildcoreestimating.com';
 $from_email = 'info@buildcoreestimating.com';
-$subject = 'New Contact Form Submission - BuildCore Estimating';
+$subject    = 'New Contact Form Submission - BuildCore Estimating';
 
 
+// ========================================
 // Only allow POST requests
+// ========================================
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
     echo json_encode([
         'success' => false,
         'message' => 'Invalid request.'
     ]);
+
     exit;
 }
 
 
-// Get form values
-$name = trim($_POST['name'] ?? '');
-$email = trim($_POST['email'] ?? '');
-$phone = trim($_POST['phone'] ?? '');
+// ========================================
+// Get Form Values
+// ========================================
+
+$name    = trim($_POST['name'] ?? '');
+$email   = trim($_POST['email'] ?? '');
+$phone   = trim($_POST['phone'] ?? '');
 $message = trim($_POST['message'] ?? '');
 
 
-// Validate required fields
+// ========================================
+// Validate Required Fields
+// ========================================
+
 if (empty($name) || empty($email) || empty($message)) {
+
     echo json_encode([
         'success' => false,
         'message' => 'Please fill in all required fields.'
     ]);
+
     exit;
 }
 
 
-// Validate email
+// ========================================
+// Validate Email
+// ========================================
+
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
     echo json_encode([
         'success' => false,
         'message' => 'Please provide a valid email address.'
     ]);
+
     exit;
 }
 
 
-// Secure HTML output
-$name_safe = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-$email_safe = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
-$phone_safe = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
+// ========================================
+// Secure HTML Output
+// ========================================
+
+$name_safe = htmlspecialchars(
+    $name,
+    ENT_QUOTES,
+    'UTF-8'
+);
+
+$email_safe = htmlspecialchars(
+    $email,
+    ENT_QUOTES,
+    'UTF-8'
+);
+
+$phone_safe = htmlspecialchars(
+    $phone,
+    ENT_QUOTES,
+    'UTF-8'
+);
 
 $message_safe = nl2br(
-    htmlspecialchars($message, ENT_QUOTES, 'UTF-8')
+    htmlspecialchars(
+        $message,
+        ENT_QUOTES,
+        'UTF-8'
+    )
 );
 
 
+// ========================================
+// Create PHPMailer
+// ========================================
+
 $mail = new PHPMailer(true);
+
 
 try {
 
-    // ==============================
+    // ========================================
     // Namecheap Private Email SMTP
-    // ==============================
+    // ========================================
 
     $mail->isSMTP();
 
@@ -77,7 +130,7 @@ try {
 
     $mail->Username = 'info@buildcoreestimating.com';
 
-    // ADD YOUR NAMECHEAP PRIVATE EMAIL PASSWORD HERE
+    // Put your Namecheap Private Email password here
     $mail->Password = 'm@G!iK3kW:Sn9mY';
 
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
@@ -85,9 +138,9 @@ try {
     $mail->Port = 587;
 
 
-    // ==============================
+    // ========================================
     // Sender
-    // ==============================
+    // ========================================
 
     $mail->setFrom(
         $from_email,
@@ -95,9 +148,9 @@ try {
     );
 
 
-    // ==============================
+    // ========================================
     // Receiver
-    // ==============================
+    // ========================================
 
     $mail->addAddress(
         $to_email,
@@ -105,12 +158,9 @@ try {
     );
 
 
-    // ==============================
-    // Reply-To
-    // ==============================
-
-    // When you click Reply in your email,
-    // it will reply directly to the customer.
+    // ========================================
+    // Reply To Customer
+    // ========================================
 
     $mail->addReplyTo(
         $email,
@@ -118,9 +168,9 @@ try {
     );
 
 
-    // ==============================
+    // ========================================
     // Email Content
-    // ==============================
+    // ========================================
 
     $mail->isHTML(true);
 
@@ -165,7 +215,10 @@ try {
     ";
 
 
-    // Plain text version
+    // ========================================
+    // Plain Text Version
+    // ========================================
+
     $mail->AltBody =
         "New Contact Form Submission\n\n" .
         "Name: " . $name . "\n" .
@@ -174,9 +227,9 @@ try {
         "Message:\n" . $message;
 
 
-    // ==============================
+    // ========================================
     // Send Email
-    // ==============================
+    // ========================================
 
     $mail->send();
 
@@ -188,7 +241,7 @@ try {
 
 } catch (Exception $e) {
 
-    // Save actual SMTP error in server log
+    // Log actual SMTP error on server
     error_log(
         'BuildCore Contact Form Error: ' . $mail->ErrorInfo
     );
@@ -198,4 +251,5 @@ try {
         'message' => 'There was a problem sending your message. Please try again.'
     ]);
 }
+
 ?>
